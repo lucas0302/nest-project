@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TasksService {
-  listAllTasks() {
+  FindAll() {
     return [
       { id: 1, task: 'play a soccer' },
       { id: 2, task: 'study 7PM' },
@@ -10,7 +10,7 @@ export class TasksService {
     ];
   }
 
-  findOneTask() {
-    return { id: 1, task: 'task 1' };
+  findOne(id: string) {
+    return "O [id] que voce Busca é: " + id;
   }
 }

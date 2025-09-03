@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { identity } from 'rxjs';
 
@@ -8,12 +8,13 @@ export class TasksController {
   constructor(readonly tasksService: TasksService) { }
 
   @Get()
-  getTasks() {
-    return this.tasksService.listAllTasks()
+  FindAllTasks() {
+    return this.tasksService.FindAll();
   }
 
-  @Get('/1')
-  getTask() {
-    return this.tasksService.findOneTask()
+  @Get(':id')
+  FindOneTask(@Param('id') id: string) {
+    console.log(id);
+    return this.tasksService.findOne(id);
   }
 }
