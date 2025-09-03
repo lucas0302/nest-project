@@ -1,14 +1,19 @@
 import { Controller, Get } from '@nestjs/common';
+import { TasksService } from './tasks.service';
+import { identity } from 'rxjs';
 
 @Controller('/tasks')
 export class TasksController {
 
+  constructor(readonly tasksService: TasksService) { }
+
   @Get()
   getTasks() {
-    return 'Listando todas as tarefas de tasks';
+    return this.tasksService.listAllTasks()
   }
-  @Get('/task')
+
+  @Get('/1')
   getTask() {
-    return 'Tarefa 1';
+    return this.tasksService.findOneTask()
   }
 }
