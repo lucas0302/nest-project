@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { identity } from 'rxjs';
 
@@ -16,5 +16,11 @@ export class TasksController {
   FindOneTask(@Param('id') id: string) {
     console.log(id);
     return this.tasksService.findOne(id);
+  }
+
+  @Post()
+  CreateTask(@Body() body: any) {
+    console.log(body);
+    return this.tasksService.create(body);
   }
 }

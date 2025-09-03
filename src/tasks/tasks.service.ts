@@ -13,4 +13,8 @@ export class TasksService {
   findOne(id: string) {
     return "O [id] que voce Busca é: " + id;
   }
+
+  create(body: any) {
+    return "Criando uma tarefa com o nome de: " + body.name;
+  }
 }
