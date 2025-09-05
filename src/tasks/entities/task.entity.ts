@@ -2,6 +2,6 @@
 export class Task {
   id: number;
   name: string;
-  descriptions: string;
+  description: string;
   completed: boolean;
 }

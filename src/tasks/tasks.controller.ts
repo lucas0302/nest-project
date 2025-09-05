@@ -28,11 +28,9 @@ export class TasksController {
   }
 
   @Patch(':id')
-  updateTask(@Param() id: string, @Body() body: any) {
-    console.log("O ID:", id);
-    console.log("O BODY:", body);
+  updateTask(@Param("id") id: string, @Body() body: any) {
 
-    return "Atualizar tarefa...";
+    return this.tasksService.update(id, body);;
   }
 
   @Delete(':id')
