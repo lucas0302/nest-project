@@ -16,14 +16,14 @@ export class TasksController {
   //Route para buscar uma tarefa por ID
   @Get(':id')
   FindOneTask(@Param('id') id: string) {
-    console.log(id);
+
     return this.tasksService.findOne(id);
   }
 
   //Route para criar uma nova tarefa
   @Post()
   CreateTask(@Body() body: any) {
-    console.log(body);
+
     return this.tasksService.create(body);
   }
 
@@ -35,8 +35,7 @@ export class TasksController {
 
   @Delete(':id')
   deleteTask(@Param('id') id: string) {
-    console.log("ID Enviado " + id);
 
-    return "Deletar o Id com o numero: " + id;
+    return this.tasksService.delete(id);
   }
 }

@@ -69,7 +69,15 @@ export class TasksService {
   }
 
   //delete uma tarefa
-  delete() {
-    return "Deletar tarefa....";
+  delete(id: string) {
+    const deletedTask = this.tasks.findIndex((tasks) => tasks.id === Number(id));
+
+    if (deletedTask < 0) {
+      throw new HttpException('Essa tarefa não existe.', HttpStatus.NOT_FOUND);
+    }
+
+    this.tasks.splice(deletedTask, 1);
+
+    return { message: "Tarefa deletada com sucesso!" };
   }
 }
