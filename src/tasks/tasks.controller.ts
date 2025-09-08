@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Patch, Post, Delete, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 @Controller('/tasks')
 export class TasksController {
 
@@ -10,8 +10,8 @@ export class TasksController {
 
   //Route para buscar todas as tarefas
   @Get()
-  FindAllTasks() {
-    return this.tasksService.findAll();
+  FindAllTasks(@Query() paginationDto: PaginationDto) {
+    return this.tasksService.findAll(paginationDto);
   }
 
   //Route para buscar uma tarefa por ID
