@@ -9,25 +9,10 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 export class TasksService {
 
   constructor(private prisma: PrismaService) { }
-  //Simulando um banco de dados com um array
-  private tasks: Task[] = [
-    {
-      id: 1,
-      name: 'Task One',
-      description: 'First Task',
-      completed: false
-    }, {
-      id: 2,
-      name: 'Task two',
-      description: 'second Task',
-      completed: false
-    },
-
-  ];
 
   //buscar todas as tarefas
   async findAll(paginationDto?: PaginationDto) {
-    console.log(paginationDto);
+
     const { limit = 10, offset = 0 } = paginationDto || {};
 
     const allTasks = await this.prisma.task.findMany({

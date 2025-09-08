@@ -1,15 +1,24 @@
-import { Body, Controller, Get, Param, Patch, Post, Delete, ParseIntPipe, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Delete, ParseIntPipe, Query, UseInterceptors } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { LoggerInterceptor } from 'src/common/interceptors/logger.interceptor';
+import { BodyCreateTaskInterceptor } from '../common/interceptors/body-create-task.interceptor';
+import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
+
+
 @Controller('/tasks')
+
+//@UseInterceptors(LoggerInterceptor)
 export class TasksController {
 
   constructor(readonly tasksService: TasksService) { }
 
   //Route para buscar todas as tarefas
   @Get()
+  @UseInterceptors(LoggerInterceptor)
+  @UseInterceptors(AddHeaderInterceptor)
   FindAllTasks(@Query() paginationDto: PaginationDto) {
     return this.tasksService.findAll(paginationDto);
   }
@@ -23,6 +32,7 @@ export class TasksController {
 
   //Route para criar uma nova tarefa
   @Post()
+  @UseInterceptors(BodyCreateTaskInterceptor)
   CreateTask(@Body() createTaskDto: CreateTaskDto) {
 
     return this.tasksService.create(createTaskDto);
