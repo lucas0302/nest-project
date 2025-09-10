@@ -17,7 +17,7 @@ export class UsersService {
         name: true,
         Task: true
       }
-    });
+    })
 
     if (!user) {
       throw new HttpException('Esse usuario nao existe.', HttpStatus.NOT_FOUND);
