@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Delete, ParseIntPipe, Query, UseInterceptors, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Delete, ParseIntPipe, Query, UseInterceptors, UseGuards, Inject } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -14,7 +14,9 @@ import { AuthAdminGuard } from 'src/common/guards/admin.guards';
 
 export class TasksController {
 
-  constructor(readonly tasksService: TasksService) { }
+  constructor(
+    private readonly tasksService: TasksService,
+  ) { }
 
   //Route para buscar todas as tarefas
   @Get()
@@ -22,6 +24,7 @@ export class TasksController {
   @UseInterceptors(AddHeaderInterceptor)
   // @UseGuards(AuthAdminGuard)
   FindAllTasks(@Query() paginationDto: PaginationDto) {
+
     return this.tasksService.findAll(paginationDto);
   }
 
