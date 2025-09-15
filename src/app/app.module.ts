@@ -4,10 +4,13 @@ import { AppService } from './app.service';
 import { TasksModule } from 'src/tasks/tasks.module';
 import { UsersModule } from '../users/users.module';
 import { LoggerMiddleware } from 'src/common/middlewares/logger.middleware';
+
 @Module({
   imports: [TasksModule, UsersModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
