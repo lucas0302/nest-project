@@ -2,10 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { HashingServiceProtocol } from 'src/auth/hash/hashing.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(
+    private prisma: PrismaService,
+    private readonly hasingService: HashingServiceProtocol
+  ) { }
 
   async findOne(id: number) {
 
@@ -29,11 +33,14 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
 
     try {
+
+      const passwordHash = await this.hasingService.hash(createUserDto.password)
+
       const userRegister = await this.prisma.user.create({
         data: {
           email: createUserDto.email,
           name: createUserDto.name,
-          passwordHash: createUserDto.password
+          passwordHash: passwordHash
         },
         select: {
           id: true,
@@ -64,6 +71,15 @@ export class UsersService {
         throw new HttpException('Esse usuario nao existe.', HttpStatus.NOT_FOUND);
       }
 
+      const dataUser: { name?: string, passwordHash?: string } = {
+        name: UpdateUserDto.name ?? user.name ?? undefined,
+      }
+
+      if (UpdateUserDto?.password) {
+        const passwordHash = await this.hasingService.hash(UpdateUserDto?.password);
+        dataUser['passwordHash'] = passwordHash
+      }
+
       const updateUser = await this.prisma.user.update(
         {
           where: {
@@ -71,8 +87,8 @@ export class UsersService {
           },
           data: {
             //fazendo um ternario para verificar se o campo foi enviado ou nao se nao foi enviado ele mantem o valor antigo
-            name: UpdateUserDto.name ? UpdateUserDto.name : user.name,
-            passwordHash: UpdateUserDto.password ? UpdateUserDto.password : user.passwordHash
+            name: dataUser.name,
+            passwordHash: dataUser?.passwordHash ?? user.passwordHash
           },
           select: {
             id: true,
@@ -81,7 +97,11 @@ export class UsersService {
           }
         })
 
-      return updateUser;
+      return {
+        updateUser,
+        message: "Usuarioa atualizado!"
+
+      };
 
     } catch (err) {
       console.log(err);
